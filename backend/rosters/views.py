@@ -6,10 +6,8 @@ from rosters.serializers import ClassBatchViewSerializer, LearnerViewSerializer
 
 
 class ClassBatchView(
-    generics.RetrieveAPIView,
     generics.ListAPIView,
-    generics.DestroyAPIView,
-    generics.UpdateAPIView,
+    generics.RetrieveUpdateDestroyAPIView
 ):
     serializer_class = ClassBatchViewSerializer
 
@@ -22,13 +20,19 @@ class ClassBatchView(
             return self.retrieve(request, *args, **kwargs)
         else:
             return self.list(request, *args, **kwargs)
+        
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(name=request.data.get('name'))  # Update the name field
+        return super().update(request, *args, **kwargs)
 
 
 class LearnerView(
-    generics.RetrieveAPIView,
     generics.ListAPIView,
-    generics.DestroyAPIView,
-    generics.UpdateAPIView,
+    generics.RetrieveUpdateDestroyAPIView
 ):
     serializer_class = LearnerViewSerializer
 

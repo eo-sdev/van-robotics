@@ -14,10 +14,12 @@ const ClassBatch = ({ api }) => {
   ]
 
   const [classbatchResult, setClassBatchResult] = useState(null);
+  const [enableEditingClassBatchName, setEnableEditingClassBatchName] = useState(false);
+  const [updatedClassBatchName, setUpdatedClassBatchName] = useState("")
 
-  const fetchInfo = () => {
+  const fetchInfo = async () => {
     setClassBatchResult(null);
-    api
+    await api
       .fetchClassBatch(params.classbatchId)
       .then((res) => {
         console.log("Received ClassBatch:", res);
@@ -32,6 +34,20 @@ const ClassBatch = ({ api }) => {
   useEffect(() => {
     fetchInfo();
   }, []);
+
+  const changeClassBatchName = async (cbid) => {
+    await api
+      .updateClassBatch(cbid, { "name": updatedClassBatchName })
+      .then((res) => {
+        console.log(`Updated ClassBatch: ${res}`);
+        fetchInfo();
+      })
+      .catch((e) => {
+        console.log("Error Updating ClassBatch: ", e);
+      })
+    setEnableEditingClassBatchName(false)
+    setUpdatedClassBatchName('')
+  }
 
   return (
     <div className="App">
@@ -52,7 +68,21 @@ const ClassBatch = ({ api }) => {
                 ))}`
               ) : (
                 <div>
-                  {`${field} : ${classbatchResult[field]}`}
+                  {`${field} : ${classbatchResult[field]}   `}
+                  {field === "name" && (
+                    !enableEditingClassBatchName ? (
+                      <button onClick={() => setEnableEditingClassBatchName(true)}>Edit name</button>
+                    ) : (
+                      <>
+                        <input
+                          type="text"
+                          onChange={(e) => setUpdatedClassBatchName(e.target.value)}
+                          value={updatedClassBatchName}
+                        />
+                        <button onClick={() => changeClassBatchName(classbatchResult.id)}>Update name</button>
+                      </>
+                    )
+                  )}
                 </div>
               )}
             </>

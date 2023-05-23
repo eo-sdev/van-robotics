@@ -15,7 +15,7 @@ class ClassBatchLearnersSerializer(serializers.ModelSerializer):
 
 
 class ClassBatchViewSerializer(serializers.ModelSerializer):
-    learners = ClassBatchLearnersSerializer(many=True)
+    learners = ClassBatchLearnersSerializer(many=True, read_only=True)
     # learners = serializers.CharField(source="")
 
     class Meta:
