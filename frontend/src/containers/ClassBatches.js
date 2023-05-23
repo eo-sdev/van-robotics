@@ -38,7 +38,9 @@ const ClassBatches = ({ api }) => {
                 {classbatches && classbatches.length > 0 ? (
                     classbatches.map((learner) => (
                         <div>
-                            {`ClassBatch: ${learner.first_name} ${learner.last_name}   `}
+                            <p>
+                                {`ClassBatch: ${learner.name}, Instructor: ${learner.instructor}`}
+                            </p>
                         </div>
                     ))
                 ) : (
