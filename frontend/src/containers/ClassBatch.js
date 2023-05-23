@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { useParams, Link } from 'react-router-dom';
 import withAPI from '../services/api';
 
-import logo from '../static/logo.svg';
 import '../App.css';
 
 
@@ -11,7 +10,7 @@ const ClassBatch = ({ api }) => {
 
   const params = useParams();
   const modelFields = [
-    'id', 'name', 'instructor'
+    'id', 'name', 'instructor', 'learners'
   ]
 
   const [classbatchResult, setClassBatchResult] = useState(null);
@@ -21,11 +20,11 @@ const ClassBatch = ({ api }) => {
     api
       .fetchClassBatch(params.classbatchId)
       .then((res) => {
-        console.log("Received ClassBatch:",res);
+        console.log("Received ClassBatch:", res);
         setClassBatchResult(res);
       })
       .catch((e) => {
-        console.log("Error fetching ClassBatch: ",e);
+        console.log("Error fetching ClassBatch: ", e);
         setClassBatchResult('No results found...');
       });
   };
@@ -44,9 +43,19 @@ const ClassBatch = ({ api }) => {
       <div>
         {classbatchResult && classbatchResult.id && (
           modelFields.map((field) => (
-            <div>
-              {field + ": " + classbatchResult[field]}
-            </div>
+            <>
+              {Array.isArray(classbatchResult[field]) && classbatchResult[field].length > 0 ? (
+                `${field} : ${classbatchResult[field].map((learner) => (
+                  <div>
+                    {`${learner.first_name} ${learner.last_name}`}
+                  </div>
+                ))}`
+              ) : (
+                <div>
+                  {`${field} : ${classbatchResult[field]}`}
+                </div>
+              )}
+            </>
           ))
         )}
         {classbatchResult && !classbatchResult.id && (
