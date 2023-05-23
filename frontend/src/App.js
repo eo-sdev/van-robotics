@@ -1,14 +1,13 @@
-//import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-
-import withAPI from './services/api';
 
 import { 
   Welcome,
   ClassBatch,
   Learner,
 } from './containers';
+import Learners from './containers/Learners';
+import ClassBatches from './containers/ClassBatches';
 
 const App = ({ api }) => {
   return (
@@ -16,7 +15,9 @@ const App = ({ api }) => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Welcome />} />
+          <Route path="/learners" element={<Learners />} />
           <Route path="/learner/:learnerId" element={<Learner />} />
+          <Route path="/classbatches" element={<ClassBatches />} />
           <Route path="/classbatch/:classbatchId" element={<ClassBatch />} />
         </Routes>
       </BrowserRouter>

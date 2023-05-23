@@ -20,13 +20,41 @@ const apiFactory = (token, user) => {
     }
   }
 
+  const deleteData = () => {
+    return {
+      method: 'DELETE'
+    }
+  }
+
+  const updateData = (data) => {
+    return {
+      method: 'PATCH',  // or 'PATCH' if you want to perform a partial update
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    }
+  }
+
   const api = {
+    fetchLearners: () => {
+      return fetchWithError(`${config.apiUrl}/rosters/learner/`, getData());
+    },
     fetchLearner: (lid) => {
       return fetchWithError(`${config.apiUrl}/rosters/learner/${lid}/`, getData());
+    },
+    fetchClassBatches: () => {
+      return fetchWithError(`${config.apiUrl}/rosters/classbatch/`, getData());
     },
     fetchClassBatch: (cbid) => {
       return fetchWithError(`${config.apiUrl}/rosters/classbatch/${cbid}/`, getData());
     },
+    updateClassBatch: (cbid, data) => {
+      return fetchWithError(`${config.apiUrl}/rosters/classbatch/${cbid}/`, updateData(data))
+    },
+    deleteLearner: (lid) => {
+      return fetchWithError(`${config.apiUrl}/rosters/learner/${lid}/`, deleteData())
+    }
   }
 
   return api;

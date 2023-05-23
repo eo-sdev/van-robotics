@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { compose } from 'redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withAPI from '../services/api';
 
-import logo from '../static/logo.svg';
 import '../App.css';
 
 const Welcome = ({ api }) => {
+
+  const totalLearnersCount = useSelector((state) => state.totalLearnersCount);
 
   const [learnerSearchText, setLearnerSearchText] = useState(null);
   const [learnerResult, setLearnerResult] = useState(null);
@@ -18,30 +20,45 @@ const Welcome = ({ api }) => {
     api
       .fetchLearner(text)
       .then((res) => {
-        console.log("Received Learner:",res);
+        console.log("Received Learner:", res);
         setLearnerResult(res);
       })
       .catch((e) => {
-        console.log("Error fetching Learner: ",e);
+        console.log("Error fetching Learner: ", e);
         setLearnerResult('No results found...');
       });
   }
+
   const classbatchSearch = (text) => {
     setClassBatchResult(null);
     api
       .fetchClassBatch(text)
       .then((res) => {
-        console.log("Received ClassBatch:",res);
+        console.log("Received ClassBatch:", res);
         setClassBatchResult(res);
       })
       .catch((e) => {
-        console.log("Error fetching ClassBatch: ",e);
+        console.log("Error fetching ClassBatch: ", e);
         setClassBatchResult('No results found...');
       });
   }
 
   return (
     <div className="App">
+      <div>
+        <p>
+          Learners Count: {totalLearnersCount}
+        </p>
+      </div>
+      <div>
+        <Link
+          to={{
+            pathname: "/learners",
+          }}
+        >
+          View all learners
+        </Link>
+      </div>
       <div>
         <p>
           Find Learner by id
@@ -67,7 +84,7 @@ const Welcome = ({ api }) => {
             </p>
             <div>
               <p>
-                {"Learner "+learnerResult.id+": "}
+                {"Learner " + learnerResult.id + ": "}
                 <Link
                   to={{
                     pathname: `/learner/${learnerResult.id}`,
@@ -88,6 +105,15 @@ const Welcome = ({ api }) => {
 
       <div><p>OR</p></div>
 
+      <div>
+        <Link
+          to={{
+            pathname: "/classbatches",
+          }}
+        >
+          View all Class Batches
+        </Link>
+      </div>
       <div>
         <p>
           Find ClassBatch by id
@@ -113,7 +139,7 @@ const Welcome = ({ api }) => {
             </p>
             <div>
               <p>
-                {"ClassBatch "+classbatchResult.id+": "}
+                {"ClassBatch " + classbatchResult.id + ": "}
                 <Link
                   to={{
                     pathname: `/classbatch/${classbatchResult.id}`,

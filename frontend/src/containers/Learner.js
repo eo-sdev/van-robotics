@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import withAPI from '../services/api';
 
-import logo from '../static/logo.svg';
 import '../App.css';
+import { useSelector } from 'react-redux';
 
 
 const Learner = ({ api }) => {
+
+  const totalLearnersCount = useSelector((state) => state.totalLearnersCount);
 
   const params = useParams();
   const modelFields = [
@@ -21,11 +23,11 @@ const Learner = ({ api }) => {
     api
       .fetchLearner(params.learnerId)
       .then((res) => {
-        console.log("Received Learner:",res);
+        console.log("Received Learner:", res);
         setLearnerResult(res);
       })
       .catch((e) => {
-        console.log("Error fetching Learner: ",e);
+        console.log("Error fetching Learner: ", e);
         setLearnerResult('No results found...');
       });
   };
@@ -36,6 +38,11 @@ const Learner = ({ api }) => {
 
   return (
     <div className="App">
+      <div>
+        <p>
+          Learners Count: {totalLearnersCount}
+        </p>
+      </div>
       <div>
         <p>
           Learner info:
