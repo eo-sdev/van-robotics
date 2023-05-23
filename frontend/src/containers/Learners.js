@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { useParams, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import withAPI from '../services/api';
+import { updateTotalLearnersCount } from '../store/actions';
 
-import logo from '../static/logo.svg';
 import '../App.css';
 
-
 const Learners = ({ api }) => {
+    const totalLearnersCount = useSelector((state) => state.totalLearnersCount);
+    const dispatch = useDispatch();
+
     const [learners, setLearners] = useState(null);
 
     const fetchLearners = () => {
@@ -16,6 +18,7 @@ const Learners = ({ api }) => {
             .fetchLearners()
             .then((res) => {
                 console.log("Received Learner:", res);
+                dispatch(updateTotalLearnersCount(res.length))
                 setLearners(res);
             })
             .catch((e) => {
@@ -43,6 +46,11 @@ const Learners = ({ api }) => {
 
     return (
         <div className="App">
+            <div>
+                <p>
+                    Learners Count: {totalLearnersCount}
+                </p>
+            </div>
             <div>
                 <p>
                     Learners list:

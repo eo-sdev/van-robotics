@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import withAPI from '../services/api';
 
 import '../App.css';
@@ -61,11 +61,14 @@ const ClassBatch = ({ api }) => {
           modelFields.map((field) => (
             <>
               {Array.isArray(classbatchResult[field]) && classbatchResult[field].length > 0 ? (
-                `${field} : ${classbatchResult[field].map((learner) => (
-                  <div>
-                    {`${learner.first_name} ${learner.last_name}`}
-                  </div>
-                ))}`
+                `${field} : ${classbatchResult[field].map((learner) => {
+                  console.log(learner.first_name)
+                  return (
+                    <div>
+                      {`${learner.first_name} ${learner.last_name}`}
+                    </div>
+                  )
+                })}`
               ) : (
                 <div>
                   {`${field} : ${classbatchResult[field]}   `}

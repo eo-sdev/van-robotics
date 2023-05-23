@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { compose } from 'redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withAPI from '../services/api';
 
 import '../App.css';
 
 const Welcome = ({ api }) => {
+
+  const totalLearnersCount = useSelector((state) => state.totalLearnersCount);
 
   const [learnerSearchText, setLearnerSearchText] = useState(null);
   const [learnerResult, setLearnerResult] = useState(null);
@@ -42,6 +45,11 @@ const Welcome = ({ api }) => {
 
   return (
     <div className="App">
+      <div>
+        <p>
+          Learners Count: {totalLearnersCount}
+        </p>
+      </div>
       <div>
         <Link
           to={{
